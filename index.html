@@ -39,7 +39,7 @@ footer{text-align:center;color:#9ca3af;font-size:11px;padding:4px}
 <section class="card">
  <div class="row"><h2>模拟选号</h2><span class="muted">红球 5 个 · 蓝球 2 个</span></div>
  <div class="ball-row" id="current" aria-label="当前号码"></div>
- <div class="actions"><button class="btn primary" id="generate">随机生成一注</button><button class="btn secondary" id="generate5">生成 5 注</button></div>
+ <div class="actions"><button class="btn primary" id="generate">随机生成一注</button><label class="muted" for="batchCount" style="display:flex;align-items:center;gap:6px;white-space:nowrap">生成<select class="count" id="batchCount" aria-label="选择生成注数"><option value="5" selected>5</option><option value="10">10</option><option value="20">20</option><option value="100">100</option></select>注</label></div><button class="btn secondary" id="generateBatch" style="width:100%;margin-top:10px">批量生成</button>
  <div class="muted" style="margin-top:12px">号码范围：红球 1–35，蓝球 1–12（依据所提供程序的随机规则）</div>
 </section>
 <section class="card">
@@ -67,7 +67,7 @@ footer{text-align:center;color:#9ca3af;font-size:11px;padding:4px}
  function escapeText(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
  function generate(){const item={red:pick(35,5),blue:pick(12,2),time:new Date().toLocaleString()};history.push(item);if(history.length>200)history=history.slice(-200);try{localStorage.setItem('lottery-sim-history',JSON.stringify(history))}catch(e){}renderCurrent(item);renderHistory()}
  $('generate').addEventListener('click',generate);
- $('generate5').addEventListener('click',()=>{for(let i=0;i<5;i++)generate()});
+ $('generateBatch').addEventListener('click',()=>{const count=Number($('batchCount').value)||5;for(let i=0;i<count;i++)generate()});
  $('clear').addEventListener('click',()=>{if(confirm('确定清空所有模拟记录吗？')){history=[];try{localStorage.removeItem('lottery-sim-history')}catch(e){}renderCurrent(null);renderHistory()}});
  renderHistory(); if(history.length)renderCurrent(history[history.length-1]);else generatePreview();
  function generatePreview(){renderCurrent({red:pick(35,5),blue:pick(12,2)})}
